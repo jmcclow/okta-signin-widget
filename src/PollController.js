@@ -24,7 +24,7 @@ function (Okta, FormController) {
           .then(() => {
             this.options.appState.trigger('navigate', '');
           })
-          .fail(() => {
+          .catch(() => {
             this._stopPolling();
           });
       },
@@ -65,7 +65,7 @@ function (Okta, FormController) {
               }
             }, 1000);
           })
-          .fail(()=> {
+          .catch(()=> {
             this._stopPolling();
           });
       },
