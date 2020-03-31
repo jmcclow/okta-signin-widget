@@ -1,4 +1,5 @@
 /* global __dirname, module */
+/* eslint no-undef: 0 */
 
 const path = require('path');
 const webpackConfig = require('./webpack.test.config.js');
@@ -8,11 +9,11 @@ const rootDir = path.resolve(__dirname);
 module.exports = (config) => {
   const options = {
     basePath: './',
-    browsers: ['ChromeHeadlessNoSandbox'],
+    browsers: ['PhantomJSCustom'],
     frameworks: ['karma-overrides', 'jasmine-jquery', 'jasmine'],
     files: [
       './node_modules/babel-polyfill/dist/polyfill.js',
-      { pattern: './test/unit/main.js', watched: false },
+      { pattern: './test/unit/main_applitools.js', watched: false },
       { pattern: './test/unit/assets/*', watched: false, included: false, served: true, nocache: false },
       { pattern: './target/css/*.css', watched: true, included: true, served: true },
       { pattern: './target/**/*', watched: false, included: false, served: true },
@@ -21,7 +22,7 @@ module.exports = (config) => {
       '/img/logos/': 'http://localhost:9876/base/test/unit/assets/'
     },
     preprocessors: {
-      'test/unit/main.js': ['webpack', 'sourcemap'],
+      'test/unit/main_applitools.js': ['webpack', 'sourcemap'],
     },
     plugins: [
       'karma-*',
@@ -61,6 +62,16 @@ module.exports = (config) => {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox']
+      },
+      PhantomJSCustom: {
+        base: 'PhantomJS',
+        options: {
+          onCallback: function (data) {
+            if (data.type === 'render' && data.fname !== undefined) {
+              page.render(data.fname);
+            }
+          }
+        }
       }
 
     },
