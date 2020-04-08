@@ -58,8 +58,7 @@ const Body = BaseForm.extend(Object.assign(
           <a href="#" id="launch-ov" class="link">click here</a> to launch Okta Verify, 
           or make sure Okta Verify is installed.
         `);
-        this.customURI = deviceChallenge.href;
-        this.doCustomURI();
+        this.doCustomURI(deviceChallenge.href);
         break;
       }
     },
@@ -128,8 +127,12 @@ const Body = BaseForm.extend(Object.assign(
       });
     },
 
-    doCustomURI () {
-      this.customURI && Util.redirectWithFormGet(this.customURI);
+    doCustomURI (customURI) {
+      const customURIContainer = this.$('#custom-uri-container');
+      customURIContainer && customURIContainer.remove();
+      this.add(`
+        <iframe src="${customURI}" id="custom-uri-container" style="display:none;"></iframe>
+      `);
     },
   },
 
